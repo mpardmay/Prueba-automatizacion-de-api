@@ -1,0 +1,6 @@
+com\everis\base\Hooks\Hooks.class
+com\everis\base\baseTest.class
+com\everis\base\stepDefinitions\freeToGameSD.class
+com\everis\base\ServicioCore.class
+com\everis\base\freeToGameService.class
+com\everis\base\stepDefinitions\ServicioSD.class
