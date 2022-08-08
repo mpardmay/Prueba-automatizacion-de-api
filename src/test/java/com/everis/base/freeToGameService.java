@@ -40,28 +40,48 @@ public class freeToGameService {
     }
 
 
-
+    @Step("verifica que los codigos de respuestas sean iguales")
     public void validateStatusCode(int i) {
-        LOGGER.info("validadon codigo de estado" + lastResponse().statusCode());
-        assertThat(lastResponse().statusCode(), is(i));
+        LOGGER.info("validadon codigo de estado " + lastResponse().statusCode());
+        restAssuredThat(response -> response.statusCode(i));
     }
-
+    @Step("Imprime el id y el titulo de cada juego encontrado")
     public void printIdAndTittleOfEachGame(){
         LOGGER.info("imprimiendo los titulos de los juegos");
-        String id = lastResponse().jsonPath().param("", 0).getString("id");
-        String title = lastResponse().jsonPath().param("", 0).getString("title");
-        System.out.println(id + " - " + title);
+        String idString = lastResponse().jsonPath().param("", 0).getString("id");
+        String titleString = lastResponse().jsonPath().param("", 0).getString("title");
+        titleString = titleString.replace("[", "")
+                .replace("]", "");
+        String[] idList = idString.split(",");
+        String[] titleList = titleString.split(",");
+
+
+        for (int i=0; i < idList.length; i++){
+            //eliminacion de ",", "[" y "]"
+            titleList[i] = titleList[i].replace(",", "")
+                    .replace("[", "")
+                    .replace("]", "");
+            idList[i] = idList[i].replace(",", "")
+                    .replace("[", "")
+                    .replace("]", "")
+                    .replace(" ", "");
+            //eliminacion del primer caracter " " que se encuentra en el segundo elemento en adelante
+            titleList[i] = (i > 0) ? titleList[i].substring(1, titleList[i].length()- 1):titleList[i];
+            //impresion de el id del juego junto a su titulo
+            System.out.println(idList[i] + " - " + titleList[i]);
+        }
+
+
     }
 
     @Step("obtiene la lista de juegos")
     public void listGames(String platform, String category) {
-
+        LOGGER.info("i lista de juegos");
         given().
                 spec(requestSpec).
                 queryParam("platform", platform).
                 queryParam("category", category).
-                when().
-                then().
-                spec(responseSpec);
+                get();
+
     }
 }
