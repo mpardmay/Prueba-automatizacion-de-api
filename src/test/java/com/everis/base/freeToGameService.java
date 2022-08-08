@@ -48,14 +48,16 @@ public class freeToGameService {
     @Step("Imprime el id y el titulo de cada juego encontrado")
     public void printIdAndTittleOfEachGame(){
         LOGGER.info("imprimiendo los titulos de los juegos");
+
+        //guardamos los datos de la consulta
         String idString = lastResponse().jsonPath().param("", 0).getString("id");
         String titleString = lastResponse().jsonPath().param("", 0).getString("title");
-        titleString = titleString.replace("[", "")
-                .replace("]", "");
+
+        //Enlistamos los datos obtenidos en dos listas
         String[] idList = idString.split(",");
         String[] titleList = titleString.split(",");
 
-
+        //recorremos los listados
         for (int i=0; i < idList.length; i++){
             //eliminacion de ",", "[" y "]"
             titleList[i] = titleList[i].replace(",", "")
